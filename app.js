@@ -34,24 +34,39 @@ app.post('/', function(req, res) {
     const url = "https://us7.api.mailchimp.com/3.0/lists/6e2bbc0354";
     const options = {
         method: "POST",
-        auth: "mashu:55f8883e6a48605fc7cafe0a6282aeaa-us7"
-
+        auth: "mashu:18be0d0e816d8937f8a0d6cdc3247df-us7"
+// 6 first number of auth
     }
 
-    https.request(url, options, function(response) {
-        response.on("data", function(data) {
+    const request = https.request(url, options, function(response) {
+
+        if (response.statusCode === 200) {
+            res.sendFile(__dirname + "/success.html");
+            } else {
+            res.sendFile(__dirname + "/failure.html");
+            }
+
+
+        response.on("data", function(data){
             console.log(JSON.parse(data));
         })
     })
 
+    request.write(jsonData);
+    request.end();
+
+})
+
+app.post("/failure", function(req, res) {
+    res.redirect("/");
 })
 
 app.listen(port, function(){
     console.log("Server running on port 3000");
 })
 
-//API KEY 
-// 55f8883e6a48605fc7cafe0a6282aeaa-us7
+//API Key 
+// 618be0d0e816d8937f8a0d6cdc3247df-us7
 
-//LIST ID
+//List ID
 // 6e2bbc0354
